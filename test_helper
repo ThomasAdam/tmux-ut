@@ -1,0 +1,38 @@
+# Copyright (c) 2015, Thomas Adam <thomas@xteddy.org>
+#
+# Permission to use, copy, modify, and/or distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+# SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION
+# OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
+# CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+# Helper routines for unit-tests.
+
+# Environment variables
+# XXX: Use mktemp(1)
+export TMUX_TMPDIR=${TMPDIR:-/tmp}/tmux-ut
+export TMUX_SOCK_NAME="special-tmux-ut"
+export TMUX_BINARY="$(which tmux) -L$TMUX_SOCK_NAME -f/dev/null"
+
+# Helper functions
+#
+# setup() - Runs before each test.  In this case, ensure the tmp directory
+# for the socket is present.
+setup()
+{
+	[ -d "$TMUX_TMPDIR" ] || mkdir -p "$TMUX_TMPDIR"
+}
+
+# check_session_exists() - Returns 0 if the specified session exists, 1 if
+# not.
+check_session_exists()
+{
+	$TMUX_BINARY has-session -t$1 2>/dev/null
+	assert_status 0 $? "Session '$1' not found"
+}

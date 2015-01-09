@@ -14,10 +14,27 @@
 # OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
 # CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
+# Environment variables
+# XXX: Use mktemp(1)
+export TMUX_TMPDIR=${TMPDIR:-/tmp}/tmux-ut
+export TMUX_SOCK_NAME="special-tmux-ut"
+export TMUX_CMD="$(which tmux)"
+export TMUX_BINARY="$TMUX_CMD -L$TMUX_SOCK_NAME -f/dev/null"
+export TMUX_TEST_SESSION="test-session"
+
+. test_helper
+
 attach_for_tests=0
 destroy_server=0
 
-while getopts ":an" opt
+# update_tmux_cmd() - Updates the tmux command to use.
+update_tmux_cmd()
+{
+	TMUX_CMD="$1"
+	TMUX_BINARY="$TMUX_CMD -L$TMUX_SOCK_NAME -f/dev/null"
+}
+
+while getopts ":ant:" opt
 do
 	case "$opt" in
 		a)
@@ -26,13 +43,18 @@ do
 		n)
 			destroy_server=1
 		;;
+		t)
+			update_tmux_cmd "$OPTARG"
+		;;
+		:)
+			die "Option -$OPTARG needs an argument"
+		;;
 	esac
 done
 
 shift $(($OPTIND - 1))
 
 ts() {
-	. test_helper
 
 	[ "$attach_for_tests" -eq 1 ] && {
 		[ -n "$DISPLAY" ] && [ -x "$(type -p xterm)" ] && {
@@ -44,7 +66,7 @@ ts() {
 
 	[ "$destroy_server" -eq 1 ] && {
 		printf "Killing server... all done\n"
-		$TMUX_BINARY kill-server
+		tmux kill-server
 	}
 }
 

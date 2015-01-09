@@ -14,15 +14,28 @@
 
 # Helper routines for unit-tests.
 
-# Environment variables
-# XXX: Use mktemp(1)
-export TMUX_TMPDIR=${TMPDIR:-/tmp}/tmux-ut
-export TMUX_SOCK_NAME="special-tmux-ut"
-export TMUX_BINARY="$(which tmux) -L$TMUX_SOCK_NAME -f/dev/null"
-export TMUX_TEST_SESSION="test-session"
-
 # Helper functions
 #
+# die() - Error out with message.
+# TODO: Consider requiring exit code as first argument.
+die()
+{
+	printf "tmux-ut:  FATAL:  $@\n" >&2
+	exit 99
+}
+
+# tmux() - Runs tmux with a set of command(s), wrapping up various options
+# specific to unit-testing.
+#
+# TODO:  Consider augmenting ts(1) with separate channels for stdout/stderr,
+# 		 so that they can be captured and made available, etc.
+tmux()
+{
+	[ -x "$TMUX_CMD" ] || die "Cannot find: <<$TMUX_CMD>>"
+
+	command $TMUX_BINARY "$@"
+}
+
 # setup() - Runs before each test.  In this case, ensure the tmp directory
 # for the socket is present.
 setup()
@@ -34,6 +47,6 @@ setup()
 # not.
 check_session_exists()
 {
-	local output="$($TMUX_BINARY has-session -t$1 2>&1)"
+	local output="$(tmux has-session -t$1 2>&1)"
 	assert_status 0 $? "Session '$1' not found: $output"
 }

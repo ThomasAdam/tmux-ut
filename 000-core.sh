@@ -11,12 +11,12 @@ test_destroy_server()
 		true
 	fi
 
-	$TMUX_BINARY kill-server || rm "$TMUX_TMPDIR/$TMUX_SOCK_NAME"
+	tmux kill-server || rm "$TMUX_TMPDIR/$TMUX_SOCK_NAME"
 }
 
 test_start_server()
 {
-	$TMUX_BINARY start
+	tmux start
 	assert_status 0 $?
 }
 

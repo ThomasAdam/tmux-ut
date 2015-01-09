@@ -14,9 +14,40 @@
 # OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
 # CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
+attach_for_tests=0
+destroy_server=0
+
+while getopts ":an" opt
+do
+	case "$opt" in
+		a)
+			attach_for_tests=1
+		;;
+		n)
+			destroy_server=1
+		;;
+	esac
+done
+
+shift $(($OPTIND - 1))
+
 ts() {
+	. test_helper
+
+	[ "$attach_for_tests" -eq 1 ] && {
+		# TODO: More configuration needed:
+		#			- Check $DISPLAY
+		#			- Warn about $TMUX being set and prompt
+		#			- x-terminal-emulator, etc., don't assume xterm.
+		xterm -hold -e "$PWD/wait-for-tmux" &
+	}
+
 	command ts -r -c -s -m "$@"
-	. test_helper && $TMUX_BINARY kill-server
+
+	[ "$destroy_server" -eq 1 ] && {
+		printf "Killing server... all done\n"
+		$TMUX_BINARY kill-server
+	}
 }
 
 check_for_ts()

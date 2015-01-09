@@ -35,11 +35,9 @@ ts() {
 	. test_helper
 
 	[ "$attach_for_tests" -eq 1 ] && {
-		# TODO: More configuration needed:
-		#			- Check $DISPLAY
-		#			- Warn about $TMUX being set and prompt
-		#			- x-terminal-emulator, etc., don't assume xterm.
-		xterm -hold -e "$PWD/wait-for-tmux" &
+		[ -n "$DISPLAY" ] && [ -x "$(type -p xterm)" ] && {
+			xterm -hold -fg white -bg black -fn 8x13 -e "$PWD/wait-for-tmux" &
+		}
 	}
 
 	command ts -r -c -s -m "$@"

@@ -19,6 +19,7 @@
 export TMUX_TMPDIR=${TMPDIR:-/tmp}/tmux-ut
 export TMUX_SOCK_NAME="special-tmux-ut"
 export TMUX_BINARY="$(which tmux) -L$TMUX_SOCK_NAME -f/dev/null"
+export TMUX_TEST_SESSION="test-session"
 
 # Helper functions
 #
@@ -33,6 +34,6 @@ setup()
 # not.
 check_session_exists()
 {
-	$TMUX_BINARY has-session -t$1 2>/dev/null
-	assert_status 0 $? "Session '$1' not found"
+	local output="$($TMUX_BINARY has-session -t$1 2>&1)"
+	assert_status 0 $? "Session '$1' not found: $output"
 }

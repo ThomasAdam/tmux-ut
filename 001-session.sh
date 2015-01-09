@@ -28,7 +28,7 @@ test_create_a_default_session()
 
 test_can_create_a_named_session()
 {
-	$TMUX_BINARY new-session -d -stest_session
+	$TMUX_BINARY new-session -d -s"$TMUX_TEST_SESSION"
 	check_session_exists "test_session"
 }
 
@@ -36,14 +36,15 @@ test_can_add_windows_to_session()
 {
 	for win in $(eval echo {1..$win_limit})
 	do
-		$TMUX_BINARY neww -d -ttest_session
+		$TMUX_BINARY neww -d -t"$TMUX_TEST_SESSION"
 		assert_status 0 $? "Couldn't create window $win"
 	done
 }
 
 test_windows_in_session_totals()
 {
-	local output=$($TMUX_BINARY display -ttest_session -pF'#{session_windows}')
+	local output=$($TMUX_BINARY display -t"$TMUX_TEST_SESSION" \
+		-pF'#{session_windows}')
 	# The win_limit won't include the first window created when the
 	# test_session was, so increment it to 1, and test against the output
 	# from tmux.

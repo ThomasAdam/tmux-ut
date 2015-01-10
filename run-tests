@@ -30,6 +30,7 @@ destroy_server=0
 # update_tmux_cmd() - Updates the tmux command to use.
 update_tmux_cmd()
 {
+	[ -x "$1" ] || die "Cannot find: <<$1>>"
 	TMUX_CMD="$1"
 	TMUX_BINARY="$TMUX_CMD -L$TMUX_SOCK_NAME -f/dev/null"
 }

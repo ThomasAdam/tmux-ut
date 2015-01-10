@@ -59,7 +59,11 @@ ts() {
 
 	[ "$attach_for_tests" -eq 1 ] && {
 		[ -n "$DISPLAY" ] && [ -x "$(type -p xterm)" ] && {
-			xterm -hold -fg white -bg black -fn 8x13 -e "$PWD/wait-for-tmux" &
+			# Only run xterm if the previous window isn't there.
+			[ -n "$(xlsclients | grep -i tmux-test)" ] || {
+				xterm -title tmux-test -hold -fg white -bg black -fn 8x13 \
+					-e "$PWD/wait-for-tmux" &
+			}
 		}
 	}
 

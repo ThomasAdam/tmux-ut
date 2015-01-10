@@ -17,13 +17,12 @@
 . test_helper
 
 printf "Waiting for tmux to start...\n"
-while (( retry < 3 ))
+while :
 do
 	tmux attach -t"$TMUX_TEST_SESSION" 2>/dev/null || {
 		printf "."
 		sleep 1
 	}
-	((retry++))
 done
 
 printf "\nTests finished; held window."

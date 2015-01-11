@@ -41,6 +41,10 @@ tmux()
 setup()
 {
 	[ -d "$TMUX_TMPDIR" ] || mkdir -p "$TMUX_TMPDIR"
+
+	# Give a little bit of time between tests; in attached mode, some things
+	# can be missed.
+	sleep 0.5
 }
 
 # check_session_exists() - Returns 0 if the specified session exists, 1 if
@@ -49,4 +53,14 @@ check_session_exists()
 {
 	local output="$(tmux has-session -t$1 2>&1)"
 	assert_status 0 $? "Session '$1' not found: $output"
+}
+
+# clients_attached() - Returns the number of clients attached to the
+# specified session.
+clients_attached()
+{
+	session_arg=${1:-}
+	[ -n "$session_arg" ] && session_arg="-t $session_arg"
+
+	echo "$(tmux display $session_arg -pF '#{session_attached}')"
 }

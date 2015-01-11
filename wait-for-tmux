@@ -21,7 +21,7 @@ while :
 do
 	tmux attach -t"$TMUX_TEST_SESSION" 2>/dev/null || {
 		printf "."
-		sleep 1
+		sleep 0.5
 	}
 done
 

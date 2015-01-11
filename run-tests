@@ -28,6 +28,7 @@ export TMUX_TEST_SESSION="test-session"
 
 attach_for_tests=0
 destroy_server=0
+ts_debug=""
 
 # update_tmux_cmd() - Updates the tmux command to use.
 update_tmux_cmd()
@@ -37,7 +38,7 @@ update_tmux_cmd()
 	TMUX_BINARY="$TMUX_CMD -L$TMUX_SOCK_NAME -f/dev/null"
 }
 
-while getopts ":ant:" opt
+while getopts ":andt:" opt
 do
 	case "$opt" in
 		a)
@@ -48,6 +49,9 @@ do
 		;;
 		t)
 			update_tmux_cmd "$OPTARG"
+		;;
+		d)
+			ts_debug='-d'
 		;;
 		:)
 			die "Option -$OPTARG needs an argument"
@@ -69,7 +73,7 @@ ts() {
 		}
 	}
 
-	command ts -r -c -s -m "$@"
+	command ts $ts_debug -r -c -s -m "$@"
 
 	[ "$destroy_server" -eq 1 ] && {
 		printf "Killing server... all done\n"

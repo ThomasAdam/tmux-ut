@@ -94,4 +94,4 @@ check_for_ts()
 check_for_ts
 
 export PATH=$(pwd)/ts/bin:$PATH
-ts ./*.sh
+ts ./tests/*.sh

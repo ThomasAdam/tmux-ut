@@ -1,0 +1,21 @@
+ts(1) limitations
+=================
+
+Consideration should be given as to whether ts(1) itself needs to support
+these things:
+
+* Separate out stdout/stderr into different variables, and provide a wrapper
+  so that each test doesn't need to repeat the same command substitution
+  over and over again.
+* With '-d' the trace is output for tests which have passed; perhaps limit
+  this to only tests which have failed.
+* Provide a 'skip' test option.
+
+Tests
+=====
+
+* Write all the tests!  Separate out into the following files
+	- Session
+	- Windows
+	- Panes
+	- Client

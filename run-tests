@@ -24,6 +24,9 @@ export TMUX_CMD="$(which tmux)"
 export TMUX_BINARY="$TMUX_CMD -L$TMUX_SOCK_NAME -f/dev/null"
 export TMUX_TEST_SESSION="test-session"
 
+# ts(1) environment variables (no command-line option to ts(1) for these)
+export TS_DIFF="diff -u"
+
 . test_helper
 
 attach_for_tests=0

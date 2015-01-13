@@ -54,24 +54,24 @@ test_windows_in_session_totals()
 
 test_can_switch_client_prev()
 {
+	[ "$(clients_attached)" -eq 0 ] && return 0
+
 	local output="$(tmux switch-client -p 2>&1)"
 	assert_status 0 $? "Couldn't switch-client -p: <<$output>>"
 
-	[ "$(clients_attached)" -ge 1 ] && {
-		output="$(tmux display -pF'#{client_session}')"
-		assert_output "0" "$output"
-	}
+	output="$(tmux display -pF'#{client_session}')"
+	assert_output "0" "$output"
 }
 
 test_can_switch_client_next()
 {
+	[ "$(clients_attached)" -eq 0 ] && return 0
+
 	local output="$(tmux switch-client -n 2>&1)"
 	assert_status 0 $? "Couldn't switch-client -n:  <<$output>>"
 
-	[ "$(clients_attached)" -ge 1 ] && {
-		output="$(tmux display -pF'#{client_session}')"
-		assert_output "$TMUX_TEST_SESSION" "$output"
-	}
+	output="$(tmux display -pF'#{client_session}')"
+	assert_output "$TMUX_TEST_SESSION" "$output"
 }
 
 . ts

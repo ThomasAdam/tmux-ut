@@ -29,7 +29,7 @@ test_create_a_default_session()
 test_can_create_a_named_session()
 {
 	tmux new-session -d -s"$TMUX_TEST_SESSION"
-	check_session_exists "test_session"
+	check_session_exists "$TMUX_TEST_SESSION"
 }
 
 test_can_add_windows_to_session()

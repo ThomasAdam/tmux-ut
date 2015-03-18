@@ -18,8 +18,6 @@
 
 . test_helper
 
-win_limit=$((RANDOM % 20))
-
 test_create_a_default_session()
 {
 	tmux new-session -d
@@ -41,31 +39,10 @@ test_create_session_start_dir()
 	assert_output "$TMUX_TMPDIR" "$output"
 }
 
-test_can_add_windows_to_session()
-{
-	for win in $(eval echo {1..$win_limit})
-	do
-		tmux neww -d -t"$TMUX_TEST_SESSION"
-		assert_status 0 $? "Couldn't create window $win"
-	done
-}
-
 test_can_rename_session()
 {
 	tmux rename-session -t0 "new-0"
 	check_session_exists "new-0"
-}
-
-
-test_windows_in_session_totals()
-{
-	output=$(tmux display -t"$TMUX_TEST_SESSION" \
-		-pF'#{session_windows}')
-	# The win_limit won't include the first window created when the
-	# test_session was, so increment it to 1, and test against the output
-	# from tmux.
-	((win_limit++))
-	assert_output "$win_limit" "$output"
 }
 
 test_can_switch_client_prev()

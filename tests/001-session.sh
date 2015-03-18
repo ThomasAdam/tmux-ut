@@ -43,7 +43,7 @@ test_can_add_windows_to_session()
 
 test_windows_in_session_totals()
 {
-	local output=$(tmux display -t"$TMUX_TEST_SESSION" \
+	output=$(tmux display -t"$TMUX_TEST_SESSION" \
 		-pF'#{session_windows}')
 	# The win_limit won't include the first window created when the
 	# test_session was, so increment it to 1, and test against the output
@@ -56,7 +56,7 @@ test_can_switch_client_prev()
 {
 	[ $TMUX_TEST_SKIP -eq 1 ] && skip "No attached client"
 
-	local output="$(tmux switch-client -p 2>&1)"
+	output="$(tmux switch-client -p 2>&1)"
 	assert_status 0 $? "Couldn't switch-client -p: <<$output>>"
 
 	[ "$(clients_attached)" -ge 1 ] && {
@@ -69,7 +69,7 @@ test_can_switch_client_next()
 {
 	[ $TMUX_TEST_SKIP -eq 1 ] && skip "No attached client"
 
-	local output="$(tmux switch-client -n 2>&1)"
+	output="$(tmux switch-client -n 2>&1)"
 	assert_status 0 $? "Couldn't switch-client -n:  <<$output>>"
 
 	[ "$(clients_attached)" -ge 1 ] && {

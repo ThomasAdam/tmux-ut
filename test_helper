@@ -34,6 +34,7 @@ tmux()
 	[ -x "$TMUX_CMD" ] || die "Cannot find: <<$TMUX_CMD>>"
 
 	command $TMUX_BINARY "$@"
+	return $?
 }
 
 # setup() - Runs before each test.  In this case, ensure the tmp directory
@@ -51,8 +52,8 @@ setup()
 # not.
 check_session_exists()
 {
-	local output="$(tmux has-session -t$1 2>&1)"
-	assert_status 0 $? "Session '$1' not found: $output"
+	output="$(tmux has-session -t$1 2>&1)"
+	assert_status 0 $? "status: ${?}, reason: $output"
 }
 
 # clients_attached() - Returns the number of clients attached to the

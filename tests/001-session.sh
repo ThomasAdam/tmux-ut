@@ -54,7 +54,7 @@ test_can_switch_client_prev()
 
 	[ "$(clients_attached)" -ge 1 ] && {
 		output="$(tmux display -pF'#{client_session}')"
-		assert_output "0" "$output"
+		assert_output "new-0" "$output"
 	}
 }
 

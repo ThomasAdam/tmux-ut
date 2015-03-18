@@ -54,6 +54,8 @@ test_windows_in_session_totals()
 
 test_can_switch_client_prev()
 {
+	[ $TMUX_TEST_SKIP -eq 1 ] && skip "No attached client"
+
 	local output="$(tmux switch-client -p 2>&1)"
 	assert_status 0 $? "Couldn't switch-client -p: <<$output>>"
 
@@ -65,6 +67,8 @@ test_can_switch_client_prev()
 
 test_can_switch_client_next()
 {
+	[ $TMUX_TEST_SKIP -eq 1 ] && skip "No attached client"
+
 	local output="$(tmux switch-client -n 2>&1)"
 	assert_status 0 $? "Couldn't switch-client -n:  <<$output>>"
 

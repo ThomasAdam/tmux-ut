@@ -32,6 +32,15 @@ test_can_create_a_named_session()
 	check_session_exists "$TMUX_TEST_SESSION"
 }
 
+test_create_session_start_dir()
+{
+	tmux kill-session -t"$TMUX_TEST_SESSION" && \
+	tmux new-session -d -s"$TMUX_TEST_SESSION" -c"$TMUX_TMPDIR"
+
+	output="$(tmux display -pF'#{pane_current_path}')"
+	assert_output "$TMUX_TMPDIR" "$output"
+}
+
 test_can_add_windows_to_session()
 {
 	for win in $(eval echo {1..$win_limit})
@@ -40,6 +49,13 @@ test_can_add_windows_to_session()
 		assert_status 0 $? "Couldn't create window $win"
 	done
 }
+
+test_can_rename_session()
+{
+	tmux rename-session -t0 "new-0"
+	check_session_exists "new-0"
+}
+
 
 test_windows_in_session_totals()
 {

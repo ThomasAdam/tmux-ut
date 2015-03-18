@@ -69,4 +69,13 @@ test_window_can_be_killed()
 	assert_output "$win_totals" "$new_win_totals"
 }
 
+test_window_can_be_renamed()
+{
+	local new_win="neww"
+	tmux rename-window "$new_win"
+	local win_name="$(tmux display -pF'#{window_name}')"
+
+	assert_output "$new_win" "$win_name"
+}
+
 . ts

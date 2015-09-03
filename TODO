@@ -9,7 +9,6 @@ these things:
   over and over again.
 * With '-d' the trace is output for tests which have passed; perhaps limit
   this to only tests which have failed.
-* Provide a 'skip' test option.
 
 Tests
 =====

@@ -23,6 +23,7 @@ export TMUX_SOCK_NAME="special-tmux-ut"
 export TMUX_CMD="$(which tmux)"
 export TMUX_BINARY="$TMUX_CMD -L$TMUX_SOCK_NAME -f/dev/null"
 export TMUX_TEST_SESSION="test-session"
+export TMUX_TEST_SKIP=0
 
 # ts(1) environment variables (no command-line option to ts(1) for these)
 export TS_DIFF="diff -u"
@@ -74,6 +75,8 @@ ts() {
 					-e "$PWD/wait-for-tmux" &
 			}
 		}
+	} || {
+		TMUX_TEST_SKIP=1
 	}
 
 	command ts $ts_debug -r -c -s -m "$@"
